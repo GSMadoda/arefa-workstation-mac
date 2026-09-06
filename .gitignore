@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+.DS_Store
+AREFA.app/Contents/Resources/AREFA.icns
+state/
+arefa.log
