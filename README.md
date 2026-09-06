@@ -30,20 +30,21 @@ send `/usr/local/arefa`, a byte-faithful port becomes possible; see the end.
 
 ## Two ways to use it
 
-**Hosted page** — <https://gsmadoda.github.io/arefa-workstation-mac/>. The same
-workstation, served from GitHub, talking to the model on *your* machine. The
-process-mining tab works immediately. For the conversation tab you allow the
-page's origin in Ollama once, then reload:
-```bash
-OLLAMA_ORIGINS=https://gsmadoda.github.io ollama serve
-```
-Works in Chrome/Firefox; Safari is stricter. Note the tradeoff: this lets an
-externally-hosted page drive your local model. The model still runs on your
-machine and nothing goes to the internet, but the driving code is hosted, not
-cloned. The page's System tab says so.
+**Hosted, in your browser** — <https://gsmadoda.github.io/arefa-workstation-mac/>.
+The model runs on WebGPU *inside the visitor's own browser tab* — the page is
+static (GitHub Pages), there is no backend, no API key, and nothing typed leaves
+the device. Pick a Qwen2.5 size and load it; the first load downloads the model
+and caches it. Needs a recent **Chrome or Edge** (desktop) with WebGPU; the
+process-mining tab works in any browser. This keeps AREFA's sovereign posture: it
+is hosted on the internet, but every conversation stays local to whoever uses it.
+The in-browser model is an MLC build of Qwen2.5 — the same family as the source
+`qwen2.5:7b`, not its exact Ollama quantization/digest.
 
-**Local build** — clone and run (below). Fully self-contained, no CORS setup,
-works offline, never trips Gatekeeper. This is the stricter-posture option.
+**Fully local** — clone and run (below). Runs the *exact* source model
+(`qwen2.5:7b` via Ollama) on your machine, works offline, no browser-model
+download. This is the strictest-posture option.
+
+## Requirements
 
 ## Requirements
 
