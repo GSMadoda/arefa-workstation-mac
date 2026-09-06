@@ -1,6 +1,13 @@
-# AREFA Workstation — macOS build
+# AREFA Workstation
 
-A native-runnable macOS build of the AREFA workstation.
+### ▶ Use it now, no install: **https://gsmadoda.github.io/arefa-workstation-mac/**
+
+Open that link in **desktop Chrome or Edge**. The model runs in your browser — no
+sign-in, no key, nothing leaves your machine. (This page you are reading is just
+the project's description. The link above is the actual app.)
+
+A native-runnable build of the AREFA workstation — hosted (in-browser, above) or
+fully local on macOS (below).
 
 ## What this is, and is not — read first
 
