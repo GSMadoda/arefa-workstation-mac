@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AREFA Workstation</title>
+<style>
+  :root{
+    --ink:#0b0f0c; --card:#141a15; --line:#232a24; --fg:#e9ece8; --mute:#8b938b;
+    --gold:#e0a53e; --green:#61b565; --ember:#e0843e;
+    --mono:"SF Mono",ui-monospace,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    color-scheme:dark;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{background:var(--ink);color:var(--fg);font-family:var(--sans);
+    display:flex;flex-direction:column;height:100vh;overflow:hidden}
+  header,nav.tabs,#banner{flex:0 0 auto}
+  a{color:var(--gold)}
+  header{border-bottom:1px solid var(--line);background:#0d120e}
+  .head-in{display:flex;align-items:center;gap:14px;height:56px;padding:0 20px}
+  .mark{font-weight:800;letter-spacing:.06em;font-size:18px} .mark b{color:var(--gold)}
+  .chip{font-family:var(--mono);font-size:10px;color:var(--ember);text-transform:uppercase;
+    letter-spacing:.14em;border:1px solid #3a2a1a;padding:4px 8px;border-radius:3px}
+  .id{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--mute);display:flex;gap:14px;align-items:center}
+  .dot{width:8px;height:8px;border-radius:2px;background:var(--mute);display:inline-block}
+  .dot.ok{background:var(--green)} .dot.warn{background:var(--ember)} .dot.bad{background:#c0392b}
+  .tabs{display:flex;gap:2px;padding:0 20px;border-bottom:1px solid var(--line);background:#0d120e}
+  .tab{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.12em;
+    color:var(--mute);background:none;border:0;padding:12px 14px;cursor:pointer;border-bottom:2px solid transparent}
+  .tab[aria-selected=true]{color:var(--fg);border-bottom-color:var(--gold)}
+  #banner{background:#1a130a;border-bottom:1px solid #3a2a1a;color:#e9d4b0;font-size:13px;
+    padding:9px 20px;display:none}
+  #banner.on{display:block}
+  #banner code{font-family:var(--mono);background:#0d120e;border:1px solid var(--line);padding:1px 5px;border-radius:3px;color:var(--gold)}
+  main{overflow:hidden;position:relative;flex:1 1 auto;min-height:0}
+  section{position:absolute;inset:0;display:none;overflow:auto}
+  section[data-on=true]{display:block}
+  .pad{padding:22px;max-width:960px;margin:0 auto}
+  /* chat */
+  #chat[data-on=true]{display:grid;grid-template-rows:1fr auto}
+  #log{overflow:auto;padding:22px;display:flex;flex-direction:column;gap:16px;max-width:900px;margin:0 auto;width:100%}
+  .msg{max-width:760px;line-height:1.6;white-space:pre-wrap;word-wrap:break-word}
+  .msg.user{align-self:flex-end;background:#1b2a1c;border:1px solid #274428;padding:10px 14px;border-radius:12px 12px 2px 12px}
+  .msg.arefa{align-self:flex-start}
+  .msg .who{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);margin-bottom:5px}
+  .msg.arefa .who{color:var(--gold)}
+  .composer{display:flex;gap:10px;padding:14px 20px;border-top:1px solid var(--line);background:#0d120e;max-width:900px;margin:0 auto;width:100%}
+  textarea{flex:1;resize:none;background:var(--card);border:1px solid var(--line);color:var(--fg);
+    border-radius:8px;padding:11px 13px;font-family:var(--sans);font-size:15px;min-height:46px;max-height:160px}
+  textarea:focus{outline:2px solid var(--gold);outline-offset:-1px}
+  button.send{background:var(--gold);color:#1a1206;border:0;border-radius:8px;padding:0 20px;font-weight:700;cursor:pointer}
+  button.send:disabled{opacity:.5;cursor:default}
+  h2{font-size:13px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em;color:var(--gold);margin:0 0 16px}
+  p{color:#c1c6bf;max-width:44em} .lead{font-size:17px;color:#c9cdc7}
+  pre{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:16px 18px;overflow-x:auto;
+    font-family:var(--mono);font-size:13px;color:#dfe4dd;max-width:44em}
+  pre .c{color:var(--gold)}
+  .grid{display:grid;gap:16px;grid-template-columns:1fr 1fr;max-width:1000px}
+  @media(max-width:720px){.grid{grid-template-columns:1fr}}
+  .box{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:16px}
+  .box h3{margin:0 0 12px;font-size:12px;font-family:var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  td,th{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}
+  th{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--mute)}
+  td.n{text-align:right;font-family:var(--mono);color:var(--gold)}
+  .drop{border:1px dashed var(--line);border-radius:8px;padding:22px;text-align:center;color:var(--mute);cursor:pointer;max-width:1000px}
+  .drop.hot{border-color:var(--gold);color:var(--fg)}
+  .rowb{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+  button.b{font-family:var(--sans);font-size:13px;border-radius:7px;padding:9px 14px;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--fg)}
+  button.b.primary{background:var(--gold);color:#1a1206;border-color:var(--gold);font-weight:700}
+  .kv{font-family:var(--mono);font-size:12px;line-height:1.9;margin:0 0 16px}
+  .kv .k{color:var(--mute);display:inline-block;min-width:180px} .kv b{color:var(--fg);font-weight:400}
+  .note{border-left:2px solid var(--ember);padding:6px 0 6px 16px;color:var(--mute);max-width:44em;margin:16px 0}
+  .note b{color:var(--fg)}
+</style></head><body>
+<header><div class="head-in">
+  <span class="mark">A<b>R</b>EFA</span>
+  <span class="chip">functional-equivalence build</span>
+  <span class="id">
+    <span><span class="dot" id="oDot"></span> Ollama</span>
+    <span><span class="dot" id="mDot"></span> <span id="mLabel">model</span></span>
+  </span>
+</div></header>
+<nav class="tabs" role="tablist">
+  <button class="tab" role="tab" data-tab="chat" aria-selected="true">Conversation</button>
+  <button class="tab" role="tab" data-tab="mine" aria-selected="false">VID3 · Process mining</button>
+  <button class="tab" role="tab" data-tab="run" aria-selected="false">Run locally</button>
+  <button class="tab" role="tab" data-tab="about" aria-selected="false">System</button>
+</nav>
+<div id="banner"></div>
+<main>
+  <section id="chat" data-on="true">
+    <div id="log"></div>
+    <div class="composer">
+      <textarea id="in" placeholder="Talk to AREFA — runs on your machine's model"></textarea>
+      <button class="send" id="send">Send</button>
+    </div>
+  </section>
+
+  <section id="mine"><div class="pad">
+    <h2>VID3 · process mining</h2>
+    <p>Drop a CSV event log with <code>case</code>, <code>activity</code>, <code>timestamp</code> columns
+      (any order; extra columns ignored). Every figure is computed in your browser — nothing is uploaded.</p>
+    <div class="rowb">
+      <button class="b primary" id="sample">Load a sample event log</button>
+      <button class="b" id="choose">Choose a CSV file…</button>
+      <input type="file" id="file" accept=".csv,text/csv" hidden>
+    </div>
+    <div class="drop" id="drop">…or drop a CSV here</div>
+    <div id="out" style="margin-top:20px"></div>
+  </div></section>
+
+  <section id="run"><div class="pad">
+    <h2>Run the full workstation locally</h2>
+    <p class="lead">This page is the same app, served from GitHub and talking to the model on your Mac.
+      For a fully self-contained copy that needs no CORS setup and no internet, run it locally:</p>
+    <pre><span class="c"># needs Python 3 (ships with macOS)</span>
+git clone https://github.com/GSMadoda/arefa-workstation-mac.git
+cd arefa-workstation-mac
+python3 arefa_workstation.py</pre>
+    <p>It opens at <code>http://127.0.0.1:8973/</code> on your machine. Cloned files are not quarantined,
+      so it never trips the “unidentified developer” warning, and it works offline.</p>
+  </div></section>
+
+  <section id="about"><div class="pad">
+    <h2>System</h2>
+    <p>This is the <b>macOS functional-equivalence build</b> of the AREFA workstation — the system’s
+      described architecture, not its audited source. It does <b>not</b> reproduce the frozen
+      (<code>f7e2317a…</code>) or successor (<code>85c7f4e9…</code>) fingerprints and must not be
+      represented as exact historical identity.</p>
+    <div class="kv" id="sys" style="margin-top:16px"></div>
+    <div class="note"><b>Hosted-conversation security note.</b> This page runs from
+      <span id="originName">github.io</span> and talks to the model on your machine. For that to work you
+      allow this origin in Ollama’s CORS, which lets this externally-hosted page drive your local model.
+      The model still runs locally and nothing is sent to the internet, but the driving code is hosted, not
+      cloned. If that tradeoff matters, use the local build on the “Run locally” tab instead.</div>
+  </div></section>
+</main>
+
+<script>
+"use strict";
+const $=s=>document.querySelector(s), $$=s=>Array.prototype.slice.call(document.querySelectorAll(s));
+const OLLAMA="http://127.0.0.1:11434", MODEL="qwen2.5:7b", MODEL_ID="845dbda0ea48";
+const ORIGIN=location.origin;
+const SYSTEM_PROMPT="You are AREFA, a sovereign local workstation assistant running entirely on the "+
+  "operator's own machine. You are direct, specific, and unembarrassed by detail. When you do not know "+
+  "something you say so rather than inventing it.";
+let history=[], busy=false, reachable=false;
+
+function tab(name){
+  $$(".tab").forEach(t=>t.setAttribute("aria-selected",String(t.dataset.tab===name)));
+  $$("main section").forEach(s=>s.dataset.on=String(s.id===name));
+}
+$$(".tab").forEach(t=>t.onclick=()=>tab(t.dataset.tab));
+
+function bubble(who,cls){
+  const d=document.createElement("div"); d.className="msg "+cls;
+  d.innerHTML='<div class="who"></div><div class="body"></div>';
+  d.querySelector(".who").textContent=who;
+  $("#log").appendChild(d); $("#log").scrollTop=$("#log").scrollHeight;
+  return d.querySelector(".body");
+}
+function esc(s){return String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));}
+
+// Browser talks to the local model directly — no server in between.
+async function chat(messages,onToken){
+  const r=await fetch(OLLAMA+"/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({model:MODEL,messages,stream:true})});
+  if(!r.ok) throw new Error("HTTP "+r.status);
+  const reader=r.body.getReader(), dec=new TextDecoder(); let buf="";
+  while(true){
+    const {done,value}=await reader.read(); if(done) break;
+    buf+=dec.decode(value,{stream:true});
+    let nl; while((nl=buf.indexOf("\n"))>=0){
+      const line=buf.slice(0,nl).trim(); buf=buf.slice(nl+1);
+      if(!line) continue;
+      let o; try{o=JSON.parse(line);}catch(e){continue;}
+      const c=o.message&&o.message.content; if(c) onToken(c);
+      if(o.done) return;
+    }
+  }
+}
+function setupHelp(){
+  return "[ AREFA can't reach your local model from this page.\n\n"+
+    "1. Make sure Ollama is running with qwen2.5:7b pulled.\n"+
+    "2. Allow this page's origin in Ollama, then restart it:\n\n"+
+    "     OLLAMA_ORIGINS="+ORIGIN+" ollama serve\n\n"+
+    "3. Use Chrome or Firefox (Safari is stricter about local requests).\n\n"+
+    "If it still won't connect, use the fully-local build on the 'Run locally' tab — "+
+    "it needs no CORS setup and works offline. ]";
+}
+async function send(){
+  const t=$("#in").value.trim(); if(!t||busy) return;
+  $("#in").value=""; busy=true; $("#send").disabled=true;
+  bubble("You","user").textContent=t;
+  history.push({role:"user",content:t});
+  const out=bubble("AREFA","arefa"); out.textContent="…";
+  try{
+    let acc=""; out.textContent="";
+    await chat([{role:"system",content:SYSTEM_PROMPT}].concat(history),tok=>{
+      acc+=tok; out.textContent=acc; $("#log").scrollTop=$("#log").scrollHeight;
+    });
+    if(acc) history.push({role:"assistant",content:acc});
+    else out.textContent=setupHelp();
+  }catch(err){ out.textContent=setupHelp(); }
+  busy=false; $("#send").disabled=false; $("#in").focus();
+}
+$("#send").onclick=send;
+$("#in").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send();}});
+
+// ── process mining (in-browser) ──
+function mine(rows){
+  const clean=rows.filter(r=>r.case&&r.activity);
+  if(!clean.length) return {error:"no_events"};
+  const cases={};
+  clean.forEach(r=>{(cases[r.case]=cases[r.case]||[]).push([r.timestamp,r.activity]);});
+  const act={},edges={},starts={},ends={},variants={}; let events=0;
+  for(const c in cases){
+    const evs=cases[c].slice().sort((a,b)=> a[0]<b[0]?-1:(a[0]>b[0]?1:0));
+    const seq=evs.map(e=>e[1]); events+=seq.length;
+    seq.forEach(a=>act[a]=(act[a]||0)+1);
+    starts[seq[0]]=(starts[seq[0]]||0)+1;
+    ends[seq[seq.length-1]]=(ends[seq[seq.length-1]]||0)+1;
+    for(let i=0;i<seq.length-1;i++){const k=seq[i]+""+seq[i+1]; edges[k]=(edges[k]||0)+1;}
+    const v=seq.join(" → "); variants[v]=(variants[v]||0)+1;
+  }
+  const arr=(o,ka,kb)=>Object.keys(o).map(k=>{const e={};e[ka]=k;e[kb]=o[k];return e;}).sort((a,b)=>b[kb]-a[kb]);
+  const ed=Object.keys(edges).map(k=>{const p=k.split("");return {from:p[0],to:p[1],count:edges[k]};}).sort((a,b)=>b.count-a.count);
+  return {cases:Object.keys(cases).length,events,activities:arr(act,"activity","count"),
+    edges:ed,starts:arr(starts,"activity","count"),ends:arr(ends,"activity","count"),
+    variants:arr(variants,"variant","count")};
+}
+function parseCSV(text){
+  const lines=text.replace(/\r/g,"").split("\n").filter(l=>l.trim().length);
+  if(!lines.length) return [];
+  const head=lines[0].split(",").map(h=>h.trim().toLowerCase());
+  const ci=head.findIndex(h=>/case|trace|id/.test(h));
+  const ai=head.findIndex(h=>/activity|action|event|step|task/.test(h));
+  const ti=head.findIndex(h=>/time|date|ts|stamp/.test(h));
+  return lines.slice(1).map(l=>{const c=l.split(",");
+    return {case:(c[ci]||"").trim(),activity:(c[ai]||"").trim(),timestamp:(c[ti]||"").trim()};});
+}
+function renderMine(d){
+  const o=$("#out");
+  if(d.error){o.innerHTML='<div class="box">No usable events found — check the CSV has case and activity columns.</div>';return;}
+  const tbl=(title,rows,cols)=>'<div class="box"><h3>'+title+'</h3><table><tr>'+
+    cols.map(c=>'<th>'+c[0]+'</th>').join('')+'</tr>'+
+    rows.slice(0,25).map(x=>'<tr>'+cols.map(c=>'<td'+(c[2]?' class="n"':'')+'>'+esc(x[c[1]])+'</td>').join('')+'</tr>').join('')+'</table></div>';
+  o.innerHTML='<div class="kv">'+
+      '<div><span class="k">Cases</span><b>'+d.cases+'</b></div>'+
+      '<div><span class="k">Events</span><b>'+d.events+'</b></div>'+
+      '<div><span class="k">Distinct variants</span><b>'+d.variants.length+'</b></div></div>'+
+    '<div class="grid">'+
+    tbl('Activity frequency',d.activities,[['Activity','activity'],['Count','count',1]])+
+    tbl('Directly-follows edges',d.edges,[['From','from'],['To','to'],['Count','count',1]])+
+    tbl('Start activities',d.starts,[['Activity','activity'],['Cases','count',1]])+
+    tbl('End activities',d.ends,[['Activity','activity'],['Cases','count',1]])+
+    '</div><div class="box" style="margin-top:16px"><h3>Variants</h3><table><tr><th>Path</th><th>Cases</th></tr>'+
+    d.variants.slice(0,20).map(v=>'<tr><td>'+esc(v.variant)+'</td><td class="n">'+v.count+'</td></tr>').join('')+'</table></div>';
+}
+const runMine=text=>renderMine(mine(parseCSV(text)));
+const SAMPLE="case,activity,timestamp\nLEEMA-001,Intake,2026-08-27T09:00\nLEEMA-001,Placement,2026-08-28T10:00\n"+
+  "LEEMA-001,Support,2026-09-01T11:00\nLEEMA-001,Report,2026-09-05T14:00\nLEEMA-002,Intake,2026-08-28T09:00\n"+
+  "LEEMA-002,Placement,2026-08-29T10:00\nLEEMA-002,Report,2026-09-06T14:00\nLEEMA-003,Intake,2026-09-02T09:00\n"+
+  "LEEMA-003,Placement,2026-09-03T10:00\nLEEMA-003,Support,2026-09-04T11:00\nLEEMA-003,Report,2026-09-07T14:00";
+$("#sample").onclick=()=>runMine(SAMPLE);
+$("#choose").onclick=()=>$("#file").click();
+$("#file").onchange=e=>{const f=e.target.files[0]; if(f) f.text().then(runMine);};
+const drop=$("#drop");
+["dragover","dragenter"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add("hot");}));
+["dragleave","drop"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove("hot");}));
+drop.addEventListener("drop",e=>{const f=e.dataTransfer.files[0]; if(f) f.text().then(runMine);});
+
+// ── status: reach the local model directly ──
+$("#originName").textContent=ORIGIN;
+async function status(){
+  let m={reachable:false,present:false,id:null,identity:"UNVERIFIED"};
+  try{
+    const tags=await fetch(OLLAMA+"/api/tags").then(r=>r.json());
+    m.reachable=true;
+    (tags.models||[]).forEach(x=>{
+      const name=x.name||"", digest=(x.digest||"").replace("sha256:","");
+      if(name===MODEL||name.split(":")[0]==="qwen2.5"){
+        m.present=true; m.id=digest.slice(0,12);
+        m.identity=digest.indexOf(MODEL_ID)===0?"PASS":"DIVERGENCE";
+      }
+    });
+  }catch(e){ m.reachable=false; }
+  reachable=m.reachable;
+  $("#oDot").className="dot "+(m.reachable?"ok":"bad");
+  $("#mDot").className="dot "+(m.identity==="PASS"?"ok":(m.present?"warn":"bad"));
+  $("#mLabel").textContent=m.present?(MODEL+" · "+(m.id||"?")+" · "+m.identity):"model missing";
+  $("#banner").className=m.reachable?"":"on";
+  if(!m.reachable){
+    $("#banner").innerHTML="Conversation is offline. Start Ollama and allow this page: "+
+      "<code>OLLAMA_ORIGINS="+ORIGIN+" ollama serve</code> — then reload. "+
+      "The process-mining tab works regardless.";
+  }
+  $("#sys").innerHTML=[
+    ["Build","macOS functional-equivalence build"],
+    ["Served from",ORIGIN],
+    ["Model expected",MODEL+"  ("+MODEL_ID+")"],
+    ["Model reachable",m.reachable?"yes":"no"],
+    ["Measured id",m.id||"—"],
+    ["Identity verdict",m.identity],
+    ["Where the model runs","your machine — 127.0.0.1:11434"],
+  ].map(r=>'<div><span class="k">'+r[0]+'</span><b>'+esc(r[1])+'</b></div>').join("");
+}
+status(); setInterval(status,5000);
+bubble("AREFA","arefa").textContent=
+  "AREFA workstation, served from GitHub, talking to the model on your Mac. Ask me anything. "+
+  "If nothing answers, the page can't reach your local model yet — see the banner or the System tab.";
+$("#in").focus();
+</script></body></html>

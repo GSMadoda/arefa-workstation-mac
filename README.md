@@ -28,6 +28,23 @@ this session — only launchers, gate reports, and the Linux Ollama binary were.
 This build is what can be made honestly from the architecture in hand. If you
 send `/usr/local/arefa`, a byte-faithful port becomes possible; see the end.
 
+## Two ways to use it
+
+**Hosted page** — <https://gsmadoda.github.io/arefa-workstation-mac/>. The same
+workstation, served from GitHub, talking to the model on *your* machine. The
+process-mining tab works immediately. For the conversation tab you allow the
+page's origin in Ollama once, then reload:
+```bash
+OLLAMA_ORIGINS=https://gsmadoda.github.io ollama serve
+```
+Works in Chrome/Firefox; Safari is stricter. Note the tradeoff: this lets an
+externally-hosted page drive your local model. The model still runs on your
+machine and nothing goes to the internet, but the driving code is hosted, not
+cloned. The page's System tab says so.
+
+**Local build** — clone and run (below). Fully self-contained, no CORS setup,
+works offline, never trips Gatekeeper. This is the stricter-posture option.
+
 ## Requirements
 
 | Need | For | Install |
