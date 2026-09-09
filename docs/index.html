@@ -67,6 +67,7 @@
   @media(max-width:640px){.cards{grid-template-columns:1fr}}
   .card{background:var(--ink-900);border:1px solid var(--line);border-radius:8px;padding:20px}
   .card p{font-size:15px;margin:6px 0 0;color:var(--grey-300)}
+  .card p.names{font-size:13px;color:var(--fg);margin-top:12px;padding-top:12px;border-top:1px solid var(--line);line-height:1.6}
   .num{font-weight:500;font-size:12px;color:var(--sky-ink);font-variant-numeric:tabular-nums;letter-spacing:.02em}
   /* cohort */
   .cohort{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:8px}
@@ -199,7 +200,7 @@
           <div class="cline"><div class="k">Telephone</div><div class="v"><a href="tel:+27144035209">014 403 5209</a></div></div>
           <div class="cline"><div class="k">Email</div><div class="v"><a href="mailto:info@leemaincubation.co.za">info@leemaincubation.co.za</a></div></div>
           <div class="cline"><div class="k">Centre</div><div class="v">Stand 43, Factory A<br>Bodirelo Industrial Park<br>Mogwase, North West</div></div>
-          <div class="cline"><div class="k">Funded through</div><div class="v">Seda and SEDFA</div></div>
+          <div class="cline"><div class="k">Registered as</div><div class="v">LEEMA Incubation NPC</div></div>
         </div>
       </div>
     </section>
@@ -268,11 +269,11 @@
     <ul class="techlist">
       <li>Maps what actually happens, from timestamps rather than memory.</li>
       <li>Finds where enterprises get stuck — a funding delay shows up as a number.</li>
-      <li>Reads both directions: what the market reports, against what funders require.</li>
+      <li>Reads both directions: what the market reports, against what the programme requires.</li>
       <li>Matches the cohort to itself — the one with ICT stock and the one that needs a website.</li>
     </ul>
     <div class="note"><b>About this build.</b> AREFA here runs a Qwen2.5 model in your browser — the same model family the centre's system uses, adapted to the web. It is not the audited AREFA source, and reproduces none of its fingerprints. Nothing you type leaves your device.</div>
-    <div class="note"><b>What stays private.</b> Each owner's phone and email, and each enterprise's stated weakness, were submitted to the centre and its funder — not published here. Barriers appear in aggregate only, which is how they argue for funding without naming who is short of it.</div>
+    <div class="note"><b>What stays private.</b> Each owner's phone and email, and each enterprise's stated weakness, were submitted to the centre in confidence — not published here. Barriers appear in aggregate only, so the case can be made without naming who is short of what.</div>
   </div></section>
 </main>
 
@@ -341,11 +342,13 @@ $$("header nav button").forEach(b=>b.onclick=()=>go(b.dataset.tab));
   COHORT.forEach(e=>{const p=e.place.split(",").pop().trim();prov[p]=(prov[p]||0)+1;foot[e.footing]=(foot[e.footing]||0)+1;});
   $("#stats").innerHTML=[["9","enterprises in the cohort"],[String(Object.keys(prov).length),"provinces — North West, Gauteng, Northern Cape"],["7","industry sectors"],["4","footings at the centre"]]
     .map(s=>'<div class="stat"><div class="n">'+s[0]+'</div><div class="l">'+s[1]+'</div></div>').join("");
-  const FN=[["Incubatee","In full incubation.","incubatee"],["Reseller","Trading through the LEEMA network.","reseller"],["Strategic partner","Working with the centre on capacity.","partner"],["Exploring","In conversation, not yet placed.","exploring"]];
-  $("#footings").innerHTML=FN.map(f=>'<div class="card"><h3>'+f[0]+' <span class="num">'+(foot[f[2]]||0)+'</span></h3><p>'+f[1]+'</p></div>').join("");
+  const byFoot={};COHORT.forEach(e=>{(byFoot[e.footing]=byFoot[e.footing]||[]).push(e.name);});
+  const FN=[["Full incubatee","In full incubation.","incubatee"],["Reseller","Trading through the network.","reseller"],["Strategic partner","Working with the centre on capacity.","partner"],["Considering a partnership","In conversation, not yet placed.","exploring"]];
+  $("#footings").innerHTML=FN.map(f=>'<div class="card"><h3>'+f[0]+' <span class="num">'+(foot[f[2]]||0)+'</span></h3><p>'+f[1]+'</p>'+
+    '<p class="names">'+(byFoot[f[2]]||[]).map(esc).join(" · ")+'</p></div>').join("");
   const M=[["SMME skills development","Accredited and practical training that raises the ceiling on what an owner can run."],["Transformation","Moving Black-owned township and rural enterprises into real supply chains."],["Job creation","Permanent jobs, counted and reported. A projection is written as a projection."],["Enterprise longevity","Businesses still trading in five years, not just registered."],["Operational capacity","Systems, compliance and equipment, so growth does not break the business."]];
   $("#measures").innerHTML=M.map((m,i)=>'<div class="card"><h3><span class="num">0'+(i+1)+'</span>&nbsp;&nbsp;'+m[0]+'</h3><p>'+m[1]+'</p></div>').join("");
-  const S=[["Geographic footprint","North West 5, Gauteng 3, Northern Cape 1 — a rural-provincial development footprint."],["Relationship footing","3 incubatees, 4 resellers, 1 strategic partner, 1 exploring — a multi-tiered funnel."],["Primary barriers","Most of the nine name funding or working capital, and market access — in aggregate."],["Cohort synergies","Enterprises that buy from and sell to each other — a website builder and an ICT reseller in one list."]];
+  const S=[["Geographic footprint","North West 5, Gauteng 3, Northern Cape 1 — a rural-provincial development footprint."],["Relationship footing","3 full incubatees, 4 resellers, 1 strategic partner, 1 considering a partnership."],["Primary barriers","Most of the nine name funding or working capital, and market access — in aggregate."],["Cohort synergies","Enterprises that buy from and sell to each other — a website builder and an ICT reseller in one list."]];
   $("#synth").innerHTML=S.map(s=>'<div class="card"><h3>'+s[0]+'</h3><p>'+s[1]+'</p></div>').join("");
 })();
 
