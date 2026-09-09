@@ -136,9 +136,34 @@
   td.n2{text-align:right;font-variant-numeric:tabular-nums;color:var(--sky-ink)}
   .kv{font-size:15px;line-height:2;color:var(--grey-300)} .kv .k{color:var(--grey-500);display:inline-block;min-width:200px}
   pre{background:var(--ink-900);border:1px solid var(--line);border-radius:2px;padding:14px 16px;overflow-x:auto;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--grey-300);max-width:64ch}
+  /* bidirectional convergence */
+  .conv{border:1px solid var(--line);border-radius:8px;margin-top:26px;overflow:hidden}
+  .conv .lane{padding:16px 18px}
+  .conv .lbl{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--sky-ink);margin-bottom:12px}
+  .conv .lane.back .lbl{color:var(--grey-500)}
+  .conv .flow{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+  .conv .step{border:1px solid var(--line-2);border-radius:2px;padding:8px 12px;font-size:13px;font-weight:500;background:var(--bg)}
+  .conv .step.on{border-color:var(--sky);color:var(--fg)}
+  .conv .arr{color:var(--grey-500);font-size:13px}
+  .conv .mid{background:var(--ink-900);padding:14px 18px;text-align:center;font-size:14px;color:var(--grey-300);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .conv .mid b{color:var(--sky-ink);font-weight:600}
+  .links{margin-top:16px;display:grid;gap:10px}
+  .link{display:grid;grid-template-columns:minmax(0,1fr) 24px minmax(0,1.2fr);gap:12px;align-items:center;
+    border:1px solid var(--line);border-radius:8px;padding:13px 15px;font-size:14px;background:var(--ink-900)}
+  @media(max-width:600px){.link{grid-template-columns:1fr;gap:6px}.link .arrow{display:none}}
+  .link .sup{font-weight:600;color:var(--fg)}
+  .link .cap{display:block;color:var(--sky-ink);font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;margin-top:3px}
+  .link .arrow{color:var(--grey-500);text-align:center}
+  .link .to{color:var(--grey-300)}
+  .link .src{display:block;color:var(--grey-500);font-size:11px;margin-top:3px}
   .techlist{margin:18px 0 0;padding:0;list-style:none;display:grid;gap:11px}
   .techlist li{font-size:16px;color:var(--grey-300);padding-left:24px;position:relative;line-height:1.5}
   .techlist li::before{content:"";position:absolute;left:0;top:9px;width:8px;height:8px;background:var(--sky)}
+  .techlist.num{counter-reset:t;list-style:none}
+  .techlist.num li{padding-left:34px}
+  .techlist.num li::before{content:counter(t,decimal-leading-zero);counter-increment:t;background:none;
+    color:var(--sky-ink);font-weight:600;font-size:12px;font-variant-numeric:tabular-nums;top:2px;width:auto;height:auto}
+  .techlist li b{color:var(--fg);font-weight:600}
   .note{background:var(--ink-900);border:1px solid var(--line);border-left:2px solid var(--sky);border-radius:2px;padding:18px;color:var(--grey-500);font-size:15px;line-height:1.6;margin-top:22px}
   .note b{color:var(--fg);font-weight:600}
 </style></head><body>
@@ -189,6 +214,27 @@
         <p class="eyebrow">What the portfolio shows</p>
         <h2>Counted across the nine.</h2>
         <div class="cards" id="synth"></div>
+      </div>
+    </section>
+    <section class="band">
+      <div class="wrap">
+        <p class="eyebrow">AREFA / VID3</p>
+        <h2>Full bidirectional convergence.</h2>
+        <p>Forward reads each enterprise from intake to market. Backward reads what the market and the programme require, and folds it back into support. Where the two directions meet, support is aimed at the constraint the enterprises actually named — and the centre can match the cohort to itself.</p>
+        <div class="conv">
+          <div class="lane">
+            <div class="lbl">Forward — the enterprise into the market</div>
+            <div class="flow" id="flowF"></div>
+          </div>
+          <div class="mid">The two directions <b>converge</b>: what the market needs, met by what the cohort already has.</div>
+          <div class="lane back">
+            <div class="lbl">Backward — the market into the programme</div>
+            <div class="flow" id="flowB"></div>
+          </div>
+        </div>
+        <h3 style="margin:34px 0 4px">Links inside the cohort</h3>
+        <p style="margin:0 0 4px">Supplier to buyer, surfaced from what each enterprise offers.</p>
+        <div class="links" id="links"></div>
       </div>
     </section>
     <section class="band">
@@ -264,14 +310,18 @@
   <!-- ABOUT -->
   <section class="view" id="about"><div class="pad">
     <p class="eyebrow">AREFA / VID3</p>
-    <h2>How the pipeline is tracked</h2>
-    <p>The centre runs process mining over its own intake and support records. Stripped of the terminology, it does four things a paper file cannot:</p>
-    <ul class="techlist">
-      <li>Maps what actually happens, from timestamps rather than memory.</li>
-      <li>Finds where enterprises get stuck — a funding delay shows up as a number.</li>
-      <li>Reads both directions: what the market reports, against what the programme requires.</li>
-      <li>Matches the cohort to itself — the one with ICT stock and the one that needs a website.</li>
-    </ul>
+    <h2>Full bidirectional convergence, in eight techniques</h2>
+    <p>The centre runs process mining over its own intake and support records. Forward mining traces each enterprise from intake to market; backward mining reads the market and the programme and folds it back into support. The two converge. In plain terms, eight techniques do the work:</p>
+    <ol class="techlist num">
+      <li><b>Discovery.</b> Map how each enterprise moves through intake, compliance, mentorship and support — from the record, not memory.</li>
+      <li><b>Conformance.</b> Check that support delivery meets the programme's standards and milestones.</li>
+      <li><b>Enhancement.</b> Refine support structures from mentoring and resource histories.</li>
+      <li><b>Performance.</b> Find the bottlenecks — funding delays, capital shortages, infrastructure gaps — as numbers.</li>
+      <li><b>Bidirectional convergence.</b> Align each enterprise's operational challenge with the programme's objectives.</li>
+      <li><b>Prediction.</b> Flag enterprises at risk of stalling, so the centre can act early.</li>
+      <li><b>Social network.</b> Map the supply-chain links and B2B partnerships across the cohort.</li>
+      <li><b>Automated improvement.</b> Automate intake, verification and reporting with no manual friction.</li>
+    </ol>
     <div class="note"><b>About this build.</b> AREFA here runs a Qwen2.5 model in your browser — the same model family the centre's system uses, adapted to the web. It is not the audited AREFA source, and reproduces none of its fingerprints. Nothing you type leaves your device.</div>
     <div class="note"><b>What stays private.</b> Each owner's phone and email, and each enterprise's stated weakness, were submitted to the centre in confidence — not published here. Barriers appear in aggregate only, so the case can be made without naming who is short of what.</div>
   </div></section>
@@ -350,6 +400,23 @@ $$("header nav button").forEach(b=>b.onclick=()=>go(b.dataset.tab));
   $("#measures").innerHTML=M.map((m,i)=>'<div class="card"><h3><span class="num">0'+(i+1)+'</span>&nbsp;&nbsp;'+m[0]+'</h3><p>'+m[1]+'</p></div>').join("");
   const S=[["Geographic footprint","North West 5, Gauteng 3, Northern Cape 1 — a rural-provincial development footprint."],["Relationship footing","3 full incubatees, 4 resellers, 1 strategic partner, 1 considering a partnership."],["Primary barriers","Most of the nine name funding or working capital, and market access — in aggregate."],["Cohort synergies","Enterprises that buy from and sell to each other — a website builder and an ICT reseller in one list."]];
   $("#synth").innerHTML=S.map(s=>'<div class="card"><h3>'+s[0]+'</h3><p>'+s[1]+'</p></div>').join("");
+
+  // full bidirectional convergence
+  const flow=(steps,onLast)=>steps.map((t,i)=>'<span class="step'+(onLast&&i===steps.length-1?' on':(i===0&&!onLast?' on':''))+'">'+esc(t)+'</span>'+
+    (i<steps.length-1?'<span class="arr">→</span>':'')).join("");
+  $("#flowF").innerHTML=flow(["Intake","Placement","Support","Market readiness"],true);
+  $("#flowB").innerHTML=flow(["Market demand","Constraints named","Programme requirements","Back into support"],false);
+  const LINKS=[
+    {sup:"MIDC",cap:"Websites & e-commerce",to:["Moela Energies","Far Out Excellent"],src:"named in the portfolio report"},
+    {sup:"Motsogapele Food Produce",cap:"Fresh produce",to:["Reve P Catering","TM Leasure Homes"]},
+    {sup:"Far Out Excellent",cap:"IT equipment & support",to:["offices across the cohort"]},
+    {sup:"Lomatlhola Trading Enterprise",cap:"Supply & delivery",to:["Motsogapele produce","Moela distribution"]},
+    {sup:"Lokissa Business Solutions",cap:"Electrical work",to:["TM Leasure venues","Moela premises"]},
+    {sup:"Thakaramo Security",cap:"Security & CCTV",to:["Moela depots","TM Leasure venues"]},
+  ];
+  $("#links").innerHTML=LINKS.map(l=>'<div class="link"><div class="sup">'+esc(l.sup)+
+    '<span class="cap">'+esc(l.cap)+'</span></div><div class="arrow">→</div><div class="to">'+
+    esc(l.to.join(", "))+(l.src?'<span class="src">'+esc(l.src)+'</span>':'')+'</div></div>').join("");
 })();
 
 $("#grid").innerHTML=COHORT.map(e=>{
