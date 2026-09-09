@@ -4,144 +4,131 @@
 <title>AREFA</title>
 <style>
   :root{
-    --ink:#0b0f0c; --card:#141a15; --line:#232a24; --fg:#e9ece8; --mute:#8b938b;
-    --gold:#e0a53e; --green:#61b565; --ember:#e0843e;
-    --mono:"SF Mono",ui-monospace,Menlo,Consolas,monospace;
-    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-    color-scheme:dark;
+    --bg:#ffffff; --bg2:#f5f5f7; --fg:#1d1d1f; --grey:#6e6e73; --line:#d2d2d7;
+    --blue:#0071e3; --blue-d:#0077ed;
+    --sans:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color-scheme:light;
   }
   *{box-sizing:border-box}
   html,body{margin:0;height:100%}
-  body{background:var(--ink);color:var(--fg);font-family:var(--sans);
+  body{background:var(--bg);color:var(--fg);font-family:var(--sans);-webkit-font-smoothing:antialiased;
     display:flex;flex-direction:column;height:100vh;overflow:hidden}
-  a{color:var(--gold)}
-  header{flex:0 0 auto;border-bottom:1px solid var(--line);background:#0d120e}
-  .head-in{display:flex;align-items:center;gap:12px;height:54px;padding:0 20px}
-  .mark{font-weight:800;letter-spacing:.06em;font-size:18px} .mark b{color:var(--gold)}
-  nav{margin-left:auto;display:flex;gap:16px;font-family:var(--mono);font-size:11px;
-    text-transform:uppercase;letter-spacing:.12em}
-  nav button{background:none;border:0;color:var(--mute);cursor:pointer;font:inherit;padding:6px 2px;border-bottom:2px solid transparent}
-  nav button[aria-selected=true]{color:var(--fg);border-bottom-color:var(--gold)}
+  a{color:var(--blue);text-decoration:none} a:hover{text-decoration:underline}
+  header{flex:0 0 auto;height:48px;display:flex;align-items:center;justify-content:center;gap:26px;
+    background:rgba(255,255,255,.8);backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid var(--line)}
+  header .wm{font-weight:600;font-size:15px;letter-spacing:-.01em}
+  header nav{display:flex;gap:24px}
+  header nav button{background:none;border:0;color:var(--fg);opacity:.8;font:inherit;font-size:12px;cursor:pointer;padding:0}
+  header nav button[aria-selected=true]{opacity:1;color:var(--blue)}
   main{flex:1 1 auto;min-height:0;position:relative;overflow:hidden}
   .view{position:absolute;inset:0;display:none;overflow:auto}
   .view[data-on=true]{display:flex;flex-direction:column}
-  /* centered start / loading */
-  .center{margin:auto;text-align:center;max-width:520px;padding:32px}
-  .center h1{font-size:34px;letter-spacing:-.02em;margin:0 0 10px}
-  .center h1 b{color:var(--gold)}
-  .center p{color:#c1c6bf;margin:0 0 22px;line-height:1.6}
-  .big{background:var(--gold);color:#1a1206;border:0;border-radius:10px;padding:15px 30px;
-    font-size:17px;font-weight:800;cursor:pointer;font-family:var(--sans)}
-  .big:disabled{opacity:.6;cursor:default}
-  .fine{margin-top:16px;font-size:12px;color:var(--mute)}
-  .fine a{color:var(--mute);text-decoration:underline;cursor:pointer}
-  .adv{margin-top:14px;font-size:12px;color:var(--mute);display:none}
+  /* hero / loading */
+  .hero{margin:auto;text-align:center;padding:40px 24px;max-width:680px}
+  .hero h1{font-size:clamp(44px,7vw,72px);font-weight:600;letter-spacing:-.03em;margin:0 0 6px;line-height:1.05}
+  .hero .sub{font-size:clamp(19px,2.4vw,26px);color:var(--grey);font-weight:400;margin:0 0 34px;letter-spacing:-.01em}
+  .pill{display:inline-block;background:var(--blue);color:#fff;border:0;border-radius:980px;
+    padding:13px 30px;font-size:17px;font-weight:500;cursor:pointer;font-family:var(--sans);transition:background .2s}
+  .pill:hover{background:var(--blue-d)} .pill:disabled{opacity:.5;cursor:default}
+  .fine{margin-top:20px;font-size:13px;color:var(--grey)}
+  .fine a{cursor:pointer}
+  .adv{margin-top:16px;font-size:13px;color:var(--grey);display:none}
   .adv.on{display:block}
-  .adv select{background:var(--card);border:1px solid var(--line);color:var(--fg);border-radius:6px;padding:6px 8px;font-size:12px;font-family:var(--sans)}
-  .bar{height:8px;border:1px solid var(--line);border-radius:4px;overflow:hidden;background:#0d120e;margin:22px 0 10px}
-  .bar>i{display:block;height:100%;width:0;background:var(--gold);transition:width .2s}
-  .ptext{font-family:var(--mono);font-size:12px;color:var(--mute);line-height:1.5}
-  .warn{color:#e9d4b0}
+  .adv select{font-family:var(--sans);font-size:13px;border:1px solid var(--line);border-radius:8px;padding:7px 10px;background:#fff;color:var(--fg)}
+  .barwrap{max-width:360px;margin:30px auto 12px}
+  .bar{height:5px;border-radius:3px;background:var(--line);overflow:hidden}
+  .bar>i{display:block;height:100%;width:0;background:var(--blue);transition:width .25s}
+  .ptext{font-size:13px;color:var(--grey)}
   /* chat */
-  #log{flex:1 1 auto;overflow:auto;padding:22px;display:flex;flex-direction:column;gap:16px;max-width:820px;margin:0 auto;width:100%}
-  .msg{max-width:720px;line-height:1.6;white-space:pre-wrap;word-wrap:break-word}
-  .msg.user{align-self:flex-end;background:#1b2a1c;border:1px solid #274428;padding:10px 14px;border-radius:12px 12px 2px 12px}
-  .msg.arefa{align-self:flex-start}
-  .msg .who{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);margin-bottom:5px}
-  .msg.arefa .who{color:var(--gold)}
-  .composer{flex:0 0 auto;display:flex;gap:10px;padding:14px 20px;border-top:1px solid var(--line);background:#0d120e;max-width:820px;margin:0 auto;width:100%}
-  textarea{flex:1;resize:none;background:var(--card);border:1px solid var(--line);color:var(--fg);
-    border-radius:8px;padding:11px 13px;font-family:var(--sans);font-size:15px;min-height:46px;max-height:150px}
-  textarea:focus{outline:2px solid var(--gold);outline-offset:-1px}
-  .send{background:var(--gold);color:#1a1206;border:0;border-radius:8px;padding:0 20px;font-weight:700;cursor:pointer}
-  .send:disabled{opacity:.5;cursor:default}
-  /* simple panels */
-  .pad{padding:24px;max-width:900px;margin:0 auto;width:100%}
-  .pad h2{font-size:14px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em;color:var(--gold);margin:0 0 14px}
-  .pad p{color:#c1c6bf;max-width:44em;line-height:1.6}
-  .rowb{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
-  button.b{font-size:13px;border-radius:7px;padding:9px 14px;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--fg);font-family:var(--sans)}
-  button.b.primary{background:var(--gold);color:#1a1206;border-color:var(--gold);font-weight:700}
-  .drop{border:1px dashed var(--line);border-radius:8px;padding:22px;text-align:center;color:var(--mute);cursor:pointer}
-  .drop.hot{border-color:var(--gold);color:var(--fg)}
-  .grid{display:grid;gap:14px;grid-template-columns:1fr 1fr;margin-top:16px}
+  #log{flex:1 1 auto;overflow:auto;padding:26px 20px;display:flex;flex-direction:column;gap:14px;max-width:720px;margin:0 auto;width:100%}
+  .msg{max-width:78%;line-height:1.55;white-space:pre-wrap;word-wrap:break-word;font-size:16px}
+  .msg.user{align-self:flex-end;background:var(--blue);color:#fff;padding:10px 15px;border-radius:20px 20px 5px 20px}
+  .msg.arefa{align-self:flex-start;background:var(--bg2);color:var(--fg);padding:10px 15px;border-radius:20px 20px 20px 5px}
+  .composer{flex:0 0 auto;display:flex;gap:10px;padding:14px 20px 22px;max-width:720px;margin:0 auto;width:100%}
+  textarea{flex:1;resize:none;background:#fff;border:1px solid var(--line);color:var(--fg);
+    border-radius:22px;padding:12px 16px;font-family:var(--sans);font-size:16px;min-height:44px;max-height:150px}
+  textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 4px rgba(0,113,227,.15)}
+  .send{background:var(--blue);color:#fff;border:0;border-radius:50%;width:44px;height:44px;flex:0 0 44px;
+    font-size:20px;cursor:pointer;line-height:1}
+  .send:disabled{opacity:.4;cursor:default}
+  /* panels */
+  .pad{padding:56px 24px;max-width:760px;margin:0 auto;width:100%}
+  .pad h2{font-size:clamp(28px,4vw,40px);font-weight:600;letter-spacing:-.02em;margin:0 0 12px}
+  .pad p{color:var(--grey);font-size:17px;line-height:1.6;max-width:38em}
+  .rowb{display:flex;gap:12px;flex-wrap:wrap;margin:22px 0}
+  button.b{font-family:var(--sans);font-size:15px;border-radius:980px;padding:9px 20px;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--fg)}
+  button.b.primary{background:var(--blue);color:#fff;border-color:var(--blue)}
+  .drop{border:1px dashed var(--line);border-radius:14px;padding:26px;text-align:center;color:var(--grey);cursor:pointer;font-size:15px}
+  .drop.hot{border-color:var(--blue);color:var(--fg);background:var(--bg2)}
+  .grid{display:grid;gap:14px;grid-template-columns:1fr 1fr;margin-top:20px}
   @media(max-width:720px){.grid{grid-template-columns:1fr}}
-  .box{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px}
-  .box h3{margin:0 0 10px;font-size:11px;font-family:var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
-  table{width:100%;border-collapse:collapse;font-size:13px}
-  td,th{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}
-  th{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--mute)}
-  td.n{text-align:right;font-family:var(--mono);color:var(--gold)}
-  .kv{font-family:var(--mono);font-size:12px;line-height:1.9}
-  .kv .k{color:var(--mute);display:inline-block;min-width:180px} .kv b{color:var(--fg);font-weight:400}
-  pre{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px 16px;overflow-x:auto;font-family:var(--mono);font-size:13px;color:#dfe4dd;max-width:44em}
-  code{font-family:var(--mono)}
+  .box{background:var(--bg2);border-radius:14px;padding:18px}
+  .box h3{margin:0 0 12px;font-size:13px;font-weight:600;color:var(--grey)}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  td,th{text-align:left;padding:7px 6px;border-bottom:1px solid var(--line)}
+  th{font-size:11px;font-weight:600;color:var(--grey);text-transform:uppercase;letter-spacing:.03em}
+  td.n{text-align:right;font-variant-numeric:tabular-nums;color:var(--fg)}
+  .kv{font-size:15px;line-height:2;color:var(--fg)}
+  .kv .k{color:var(--grey);display:inline-block;min-width:210px}
+  pre{background:var(--bg2);border-radius:12px;padding:16px 18px;overflow-x:auto;font-size:14px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--fg);max-width:38em}
 </style></head><body>
-<header><div class="head-in">
-  <span class="mark">A<b>R</b>EFA</span>
+<header>
+  <span class="wm">AREFA</span>
   <nav>
-    <button data-tab="chat" aria-selected="true">Chat</button>
+    <button data-tab="chat" aria-selected="true">Assistant</button>
     <button data-tab="mine" aria-selected="false">Mining</button>
     <button data-tab="about" aria-selected="false">About</button>
   </nav>
-</div></header>
+</header>
 <main>
-  <!-- CHAT: start → loading → conversation, one flow -->
   <section class="view" id="chat" data-on="true">
-    <div class="center" id="start">
-      <h1>Talk to <b>AREFA</b></h1>
-      <p>A private assistant that runs in your browser. Nothing you type leaves your device.</p>
-      <button class="big" id="go">Start AREFA</button>
-      <div class="fine">First start downloads a small model (about 1&nbsp;GB), then it's instant.
-        · <a id="advToggle">options</a></div>
+    <div class="hero" id="start">
+      <h1>AREFA</h1>
+      <p class="sub">A private assistant. It runs in your browser.</p>
+      <button class="pill" id="go">Start</button>
+      <div class="fine">Loads once, then it's instant. <a id="advToggle">Options</a></div>
       <div class="adv" id="adv">
-        Model:
         <select id="model">
-          <option value="Qwen2.5-0.5B-Instruct-q4f16_1-MLC">Faster / lighter (0.5B)</option>
-          <option value="Qwen2.5-1.5B-Instruct-q4f16_1-MLC" selected>Balanced (1.5B)</option>
-          <option value="Qwen2.5-3B-Instruct-q4f16_1-MLC">Smarter (3B)</option>
-          <option value="Qwen2.5-7B-Instruct-q4f16_1-MLC">Strongest (7B · big download)</option>
+          <option value="Qwen2.5-0.5B-Instruct-q4f16_1-MLC">Light</option>
+          <option value="Qwen2.5-1.5B-Instruct-q4f16_1-MLC" selected>Balanced</option>
+          <option value="Qwen2.5-3B-Instruct-q4f16_1-MLC">Smart</option>
+          <option value="Qwen2.5-7B-Instruct-q4f16_1-MLC">Strongest</option>
         </select>
       </div>
     </div>
-    <div class="center" id="loading" style="display:none">
-      <h1>Waking <b>AREFA</b> up…</h1>
-      <div class="bar"><i id="fill"></i></div>
+    <div class="hero" id="loading" style="display:none">
+      <h1>Preparing</h1>
+      <div class="barwrap"><div class="bar"><i id="fill"></i></div></div>
       <div class="ptext" id="ptext">Starting…</div>
     </div>
     <div id="log" style="display:none"></div>
     <div class="composer" id="composer" style="display:none">
-      <textarea id="in" placeholder="Message AREFA"></textarea>
-      <button class="send" id="send">Send</button>
+      <textarea id="in" placeholder="Message"></textarea>
+      <button class="send" id="send">&uarr;</button>
     </div>
   </section>
 
-  <!-- MINING -->
   <section class="view" id="mine"><div class="pad">
-    <h2>Process mining</h2>
-    <p>Drop a CSV with <code>case</code>, <code>activity</code>, <code>timestamp</code> columns. It maps the
-      process — all in your browser, nothing uploaded.</p>
+    <h2>Mining</h2>
+    <p>See the process behind an event log. Drop a CSV with case, activity and timestamp. It stays in your browser.</p>
     <div class="rowb">
-      <button class="b primary" id="sample">Load a sample</button>
-      <button class="b" id="choose">Choose a CSV…</button>
+      <button class="b primary" id="sample">Sample</button>
+      <button class="b" id="choose">Choose file</button>
       <input type="file" id="file" accept=".csv,text/csv" hidden>
     </div>
-    <div class="drop" id="drop">…or drop a CSV here</div>
+    <div class="drop" id="drop">Drop a CSV here</div>
     <div id="out" style="margin-top:18px"></div>
   </div></section>
 
-  <!-- ABOUT -->
   <section class="view" id="about"><div class="pad">
-    <h2>About this build</h2>
-    <p>AREFA is a private assistant. This page runs the model <b>in your own browser</b> using WebGPU —
-      there's no server, no account, no API key, and nothing you type is sent anywhere. Chat needs a recent
-      <b>Chrome</b> or <b>Edge</b> on a computer; the Mining tab works in any browser.</p>
-    <div class="kv" id="sys" style="margin:16px 0"></div>
-    <p style="color:var(--mute)">This is a functional-equivalence build of AREFA — the same Qwen2.5 model
-      family the source system runs, adapted to the browser. It is not the audited AREFA source and does not
-      reproduce its fingerprints.</p>
-    <h2 style="margin-top:24px">Run it on your own machine</h2>
-    <p>Want the exact source model (<code>qwen2.5:7b</code> via Ollama), offline, self-contained?</p>
+    <h2>About</h2>
+    <p>AREFA runs entirely in your browser. No server, no account, no key. Nothing you type is sent anywhere.
+      The assistant needs Chrome or Edge on a computer; Mining works anywhere.</p>
+    <div class="kv" id="sys" style="margin:22px 0"></div>
+    <p>A functional-equivalence build — the same Qwen2.5 model family as the source, adapted to the browser.
+      Not the audited AREFA source.</p>
+    <h2 style="font-size:22px;margin-top:40px">Run it on your Mac</h2>
     <pre>git clone https://github.com/GSMadoda/arefa-workstation-mac.git
 cd arefa-workstation-mac
 python3 arefa_workstation.py</pre>
@@ -155,21 +142,18 @@ const SYSTEM_PROMPT="You are AREFA, a helpful private assistant running in the u
   "Be direct and clear. If you don't know something, say so.";
 const hasGPU=!!(navigator.gpu&&navigator.gpu.requestAdapter);
 
-function tab(n){$$("nav button").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.tab===n)));
+function tab(n){$$("header nav button").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.tab===n)));
   $$(".view").forEach(v=>v.dataset.on=String(v.id===n));}
-$$("nav button").forEach(b=>b.onclick=()=>tab(b.dataset.tab));
-
+$$("header nav button").forEach(b=>b.onclick=()=>tab(b.dataset.tab));
 $("#advToggle").onclick=()=>$("#adv").classList.toggle("on");
 
-// start flow
 let engine=null, history=[], busy=false;
 if(!hasGPU){
-  $("#start").innerHTML='<h1>Chat needs a computer</h1><p>To talk to AREFA, open this page in '+
-    '<b>Chrome</b> or <b>Edge</b> on a desktop or laptop. You can still use the <b>Mining</b> tab here.</p>';
+  $("#start").innerHTML='<h1>Use a computer</h1><p class="sub">The assistant needs Chrome or Edge on a '+
+    'desktop. Mining works here.</p>';
 }
-function bubble(who,cls){const d=document.createElement("div");d.className="msg "+cls;
-  d.innerHTML='<div class="who"></div><div class="body"></div>';d.querySelector(".who").textContent=who;
-  $("#log").appendChild(d);$("#log").scrollTop=$("#log").scrollHeight;return d.querySelector(".body");}
+function bubble(cls){const d=document.createElement("div");d.className="msg "+cls;
+  $("#log").appendChild(d);$("#log").scrollTop=$("#log").scrollHeight;return d;}
 
 async function start(){
   const model=$("#model").value;
@@ -179,19 +163,16 @@ async function start(){
     engine=await webllm.CreateMLCEngine(model,{initProgressCallback:r=>{
       const pct=Math.round((r.progress||0)*100);
       $("#fill").style.width=pct+"%";
-      $("#ptext").textContent=(r.text||"Loading…").replace(/\[.*?\]/g,"").trim()+"  "+pct+"%";
+      $("#ptext").textContent=pct<100?("Loading "+pct+"%"):"Almost ready…";
     }});
     $("#loading").style.display="none";
     $("#log").style.display="flex"; $("#composer").style.display="flex";
-    bubble("AREFA","arefa").textContent="Hi — I'm AREFA, running right here in your browser. Ask me anything.";
+    bubble("arefa").textContent="Hi, I'm AREFA. Ask me anything.";
     $("#in").focus();
   }catch(err){
-    $("#ptext").className="ptext warn";
-    $("#ptext").textContent="Couldn't start: "+(err&&err.message||err)+
-      ". Try a lighter model in options, or use desktop Chrome/Edge.";
-    $("#loading").querySelector(".bar").style.display="none";
-    const again=document.createElement("button"); again.className="big"; again.textContent="Try again";
-    again.style.marginTop="18px"; again.onclick=()=>location.reload();
+    $("#ptext").textContent="Couldn't start. Try a lighter model in Options, or use desktop Chrome/Edge.";
+    const again=document.createElement("button"); again.className="pill"; again.textContent="Try again";
+    again.style.marginTop="22px"; again.onclick=()=>location.reload();
     $("#loading").appendChild(again);
   }
 }
@@ -200,8 +181,8 @@ $("#go").onclick=start;
 async function send(){
   const t=$("#in").value.trim(); if(!t||busy||!engine) return;
   $("#in").value=""; busy=true; $("#send").disabled=true;
-  bubble("You","user").textContent=t; history.push({role:"user",content:t});
-  const out=bubble("AREFA","arefa"); out.textContent="…";
+  bubble("user").textContent=t; history.push({role:"user",content:t});
+  const out=bubble("arefa"); out.textContent="…";
   try{
     const stream=await engine.chat.completions.create({
       messages:[{role:"system",content:SYSTEM_PROMPT}].concat(history),stream:true});
@@ -211,7 +192,7 @@ async function send(){
       if(d){acc+=d;out.textContent=acc;$("#log").scrollTop=$("#log").scrollHeight;}
     }
     history.push({role:"assistant",content:acc});
-  }catch(err){ out.textContent="[ error: "+(err&&err.message||err)+" ]"; }
+  }catch(err){ out.textContent="Something went wrong. Please try again."; }
   busy=false; $("#send").disabled=false; $("#in").focus();
 }
 $("#send").onclick=send;
@@ -249,11 +230,11 @@ function renderMine(d){
   if(d.error){o.innerHTML='<div class="box">No usable events — check for case and activity columns.</div>';return;}
   const tbl=(t,rows,cols)=>'<div class="box"><h3>'+t+'</h3><table><tr>'+cols.map(c=>'<th>'+c[0]+'</th>').join('')+'</tr>'+
     rows.slice(0,25).map(x=>'<tr>'+cols.map(c=>'<td'+(c[2]?' class="n"':'')+'>'+esc(x[c[1]])+'</td>').join('')+'</tr>').join('')+'</table></div>';
-  o.innerHTML='<div class="kv"><div><span class="k">Cases</span><b>'+d.cases+'</b></div>'+
-    '<div><span class="k">Events</span><b>'+d.events+'</b></div>'+
-    '<div><span class="k">Variants</span><b>'+d.variants.length+'</b></div></div><div class="grid">'+
-    tbl('Activity frequency',d.activities,[['Activity','activity'],['Count','count',1]])+
-    tbl('Flow (directly-follows)',d.edges,[['From','from'],['To','to'],['Count','count',1]])+
+  o.innerHTML='<div class="kv"><div><span class="k">Cases</span>'+d.cases+'</div>'+
+    '<div><span class="k">Events</span>'+d.events+'</div>'+
+    '<div><span class="k">Variants</span>'+d.variants.length+'</div></div><div class="grid">'+
+    tbl('Activity',d.activities,[['Activity','activity'],['Count','count',1]])+
+    tbl('Flow',d.edges,[['From','from'],['To','to'],['Count','count',1]])+
     tbl('Starts',d.starts,[['Activity','activity'],['Cases','count',1]])+
     tbl('Ends',d.ends,[['Activity','activity'],['Cases','count',1]])+'</div>';
 }
@@ -269,9 +250,9 @@ drop.addEventListener("drop",e=>{const f=e.dataTransfer.files[0];if(f)f.text().t
 
 // about
 $("#sys").innerHTML=[
-  ["Runs","in your browser (WebGPU)"],
-  ["Chat available here",hasGPU?"yes":"no — use desktop Chrome/Edge"],
-  ["Your messages","stay on your device — sent nowhere"],
-  ["Model family","Qwen2.5"],
-].map(r=>'<div><span class="k">'+r[0]+'</span><b>'+esc(r[1])+'</b></div>').join("");
+  ["Runs","in your browser"],
+  ["Your messages","stay on your device"],
+  ["Assistant here",hasGPU?"yes":"needs desktop Chrome/Edge"],
+  ["Model","Qwen2.5"],
+].map(r=>'<div><span class="k">'+r[0]+'</span>'+esc(r[1])+'</div>').join("");
 </script></body></html>
