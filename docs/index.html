@@ -9,24 +9,26 @@
   /* Leema Township Incubator — brand identity: ink ground, one sky blue,
      grey ramp, Archivo, squared and bordered, no shadows or glows. */
   :root{
-    --ink:#000000; --ink-900:#0b0d0e; --ink-800:#15181a; --ink-700:#1e2225;
-    --line:#2a2f33; --line-2:#3a4045;
-    --fg:#ffffff; --grey-300:#c3c8cc; --grey-500:#8b9297; --grey-600:#6c7378;
+    --bg:#ffffff; --ink:#000000;
+    --ink-900:#f5f5f7; --ink-800:#ececef; --ink-700:#e6e6e9;
+    --line:#d2d2d7; --line-2:#c2c2c8;
+    --fg:#1d1d1f; --grey-300:#424245; --grey-500:#86868b; --grey-600:#a1a1a6;
     --sky-300:#63C4EE; --sky-400:#2BA9E0; --sky:#0E8FC4; --sky-600:#0B76A3; --sky-700:#075A7C;
-    --ok:#2e9e4b; --warn:#e0a11a; --danger:#c0392b;
+    --sky-ink:#0B76A3;
+    --ok:#1a7a2e; --warn:#8a5a00; --danger:#b3261e;
     --sans:"Archivo",Helvetica,Arial,sans-serif;
-    color-scheme:dark;
+    color-scheme:light;
   }
   *{box-sizing:border-box}
   html,body{margin:0;height:100%}
-  body{background:var(--ink);color:var(--fg);font-family:var(--sans);-webkit-font-smoothing:antialiased;
+  body{background:var(--bg);color:var(--fg);font-family:var(--sans);-webkit-font-smoothing:antialiased;
     display:flex;flex-direction:column;height:100vh;overflow:hidden;font-weight:400}
-  a{color:var(--sky-300);text-decoration:none} a:hover{color:var(--sky-400)}
+  a{color:var(--sky-ink);text-decoration:none} a:hover{color:var(--sky)}
   /* header + nav (squared, bordered, underline tabs) */
   header{flex:0 0 auto;height:56px;display:flex;align-items:center;gap:22px;
-    border-bottom:1px solid var(--line);background:var(--ink);padding:0 22px;overflow-x:auto}
+    border-bottom:1px solid var(--line);background:var(--bg);padding:0 22px;overflow-x:auto}
   header .mark{display:flex;align-items:center;flex:none}
-  header .mark img{height:22px;width:auto;display:block}
+  header .mark img{height:26px;width:auto;display:block;border-radius:2px}
   header nav{display:flex;gap:2px;margin-left:auto}
   header nav button{background:none;border:0;color:var(--grey-500);font:inherit;font-weight:500;font-size:11px;
     text-transform:uppercase;letter-spacing:.14em;cursor:pointer;padding:8px 10px;border-bottom:2px solid transparent;white-space:nowrap}
@@ -39,7 +41,7 @@
   /* sections */
   section.band{padding:64px 22px;border-bottom:1px solid var(--line)}
   .wrap{max-width:900px;margin:0 auto}
-  .eyebrow{font-weight:500;font-size:12px;text-transform:uppercase;letter-spacing:.14em;color:var(--sky);margin:0 0 14px}
+  .eyebrow{font-weight:500;font-size:12px;text-transform:uppercase;letter-spacing:.14em;color:var(--sky-ink);margin:0 0 14px}
   h1.big{font-weight:800;font-size:clamp(38px,6.5vw,66px);letter-spacing:-.025em;line-height:1.02;margin:0;text-transform:none}
   .sub{font-size:clamp(18px,2.2vw,22px);color:var(--grey-300);font-weight:400;margin:20px 0 0;line-height:1.5;max-width:30em}
   h2{font-weight:800;font-size:clamp(26px,3.6vw,38px);letter-spacing:-.02em;margin:0 0 14px;line-height:1.1}
@@ -57,7 +59,7 @@
   /* stat row (Archivo tabular) */
   .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;margin-top:6px;background:var(--line);border:1px solid var(--line)}
   @media(max-width:640px){.stats{grid-template-columns:repeat(2,1fr)}}
-  .stat{background:var(--ink);padding:22px 18px}
+  .stat{background:var(--bg);padding:22px 18px}
   .stat .n{font-weight:800;font-size:clamp(30px,4.4vw,46px);line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
   .stat .l{color:var(--grey-500);font-size:13px;margin-top:10px;line-height:1.45}
   /* panels (radius 8, 1px border, no shadow) */
@@ -65,7 +67,7 @@
   @media(max-width:640px){.cards{grid-template-columns:1fr}}
   .card{background:var(--ink-900);border:1px solid var(--line);border-radius:8px;padding:20px}
   .card p{font-size:15px;margin:6px 0 0;color:var(--grey-300)}
-  .num{font-weight:500;font-size:12px;color:var(--sky);font-variant-numeric:tabular-nums;letter-spacing:.02em}
+  .num{font-weight:500;font-size:12px;color:var(--sky-ink);font-variant-numeric:tabular-nums;letter-spacing:.02em}
   /* cohort */
   .cohort{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:8px}
   @media(max-width:700px){.cohort{grid-template-columns:1fr}}
@@ -77,13 +79,13 @@
   .ent-name{font-weight:600;font-size:18px;letter-spacing:-.01em}
   /* footing = squared bordered tag (pills are reserved for status) */
   .tag{font-weight:500;font-size:10px;text-transform:uppercase;letter-spacing:.1em;padding:4px 8px;border-radius:2px;white-space:nowrap;flex:none;border:1px solid}
-  .tag.incubatee{color:var(--sky-300);border-color:var(--sky-700)}
+  .tag.incubatee{color:var(--sky-ink);border-color:var(--sky)}
   .tag.reseller{color:var(--grey-300);border-color:var(--line-2)}
-  .tag.partner{color:#7ad18e;border-color:#2c5c38}
+  .tag.partner{color:#1a7a2e;border-color:#9dd6a9}
   .tag.exploring{color:var(--grey-500);border-color:var(--line)}
   .ent-place{color:var(--grey-500);font-size:12px;margin-top:5px;font-weight:500;letter-spacing:.02em}
   .ent-summary{color:var(--grey-300);font-size:15px;margin-top:12px;line-height:1.5}
-  .ent-more{color:var(--sky-300);font-size:12px;margin-top:14px;text-transform:uppercase;letter-spacing:.08em;font-weight:500}
+  .ent-more{color:var(--sky-ink);font-size:12px;margin-top:14px;text-transform:uppercase;letter-spacing:.08em;font-weight:500}
   details[open] .ent-more{display:none}
   .ent-detail{padding:0 20px 20px;font-size:14px}
   .ent-detail .row{padding:10px 0;border-top:1px solid var(--line);display:grid;grid-template-columns:118px 1fr;gap:14px}
@@ -92,11 +94,11 @@
   /* contact */
   .contact{display:grid;grid-template-columns:repeat(2,1fr);gap:18px 40px;margin-top:26px;max-width:640px}
   @media(max-width:560px){.contact{grid-template-columns:1fr}}
-  .cline .k{font-size:11px;font-weight:500;color:var(--sky);text-transform:uppercase;letter-spacing:.12em}
+  .cline .k{font-size:11px;font-weight:500;color:var(--sky-ink);text-transform:uppercase;letter-spacing:.12em}
   .cline .v{font-size:17px;margin-top:5px;color:var(--fg)}
   /* assistant */
   .hero{margin:auto;text-align:center;padding:40px 22px;max-width:620px}
-  .hero .mk{height:30px;margin-bottom:26px}
+  .hero .mk{height:34px;margin-bottom:26px;border-radius:2px}
   .hero h1{font-weight:800;font-size:clamp(30px,5vw,46px);letter-spacing:-.02em;margin:0 0 8px}
   .hero .sub2{font-size:clamp(17px,2vw,21px);color:var(--grey-300);margin:0 auto 30px;max-width:24em;line-height:1.5}
   .barwrap{max-width:340px;margin:26px auto 12px}
@@ -126,11 +128,11 @@
   .grid{display:grid;gap:14px;grid-template-columns:1fr 1fr;margin-top:18px}
   @media(max-width:700px){.grid{grid-template-columns:1fr}}
   .box{background:var(--ink-900);border:1px solid var(--line);border-radius:8px;padding:16px}
-  .box h3{margin:0 0 10px;font-size:11px;font-weight:500;color:var(--sky);text-transform:uppercase;letter-spacing:.1em}
+  .box h3{margin:0 0 10px;font-size:11px;font-weight:500;color:var(--sky-ink);text-transform:uppercase;letter-spacing:.1em}
   table{width:100%;border-collapse:collapse;font-size:14px}
   td,th{text-align:left;padding:7px 6px;border-bottom:1px solid var(--line)}
   th{font-size:10px;font-weight:500;color:var(--grey-500);text-transform:uppercase;letter-spacing:.08em}
-  td.n2{text-align:right;font-variant-numeric:tabular-nums;color:var(--sky-300)}
+  td.n2{text-align:right;font-variant-numeric:tabular-nums;color:var(--sky-ink)}
   .kv{font-size:15px;line-height:2;color:var(--grey-300)} .kv .k{color:var(--grey-500);display:inline-block;min-width:200px}
   pre{background:var(--ink-900);border:1px solid var(--line);border-radius:2px;padding:14px 16px;overflow-x:auto;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--grey-300);max-width:64ch}
   .techlist{margin:18px 0 0;padding:0;list-style:none;display:grid;gap:11px}
@@ -140,7 +142,7 @@
   .note b{color:var(--fg);font-weight:600}
 </style></head><body>
 <header>
-  <span class="mark"><img src="assets/leema-mark-white.png" alt="LEEMA Technology Incubation"></span>
+  <span class="mark"><img src="assets/leema-mark.png" alt="LEEMA Technology Incubation"></span>
   <nav>
     <button data-tab="home" aria-selected="true">Overview</button>
     <button data-tab="cohort" aria-selected="false">Cohort</button>
@@ -218,7 +220,7 @@
   <!-- ASSISTANT -->
   <section class="view flex" id="assistant">
     <div class="hero" id="start">
-      <img class="mk" src="assets/leema-mark-white.png" alt="LEEMA Technology Incubation">
+      <img class="mk" src="assets/leema-mark.png" alt="LEEMA Technology Incubation">
       <h1>AREFA</h1>
       <p class="sub2">The centre's assistant. It runs in your browser. Nothing you type leaves your device.</p>
       <button class="btn" id="go">Start</button>
