@@ -184,7 +184,6 @@
     <button data-tab="home" aria-selected="true">Overview</button>
     <button data-tab="cohort" aria-selected="false">Cohort</button>
     <button data-tab="assistant" aria-selected="false">AREFA</button>
-    <button data-tab="mine" aria-selected="false">Mining</button>
     <button data-tab="about" aria-selected="false">About</button>
   </nav>
 </header>
@@ -330,20 +329,6 @@
       <button class="send" id="send">&uarr;</button>
     </div>
   </section>
-
-  <!-- MINING -->
-  <section class="view" id="mine"><div class="pad">
-    <p class="eyebrow">VID3</p>
-    <h2>Process mining</h2>
-    <p>The centre reads its own records with process mining. Drop a CSV event log — case, activity, timestamp — and see the flow. It stays in your browser.</p>
-    <div class="rowb">
-      <button class="b primary" id="sample">Sample</button>
-      <button class="b" id="choose">Choose file</button>
-      <input type="file" id="file" accept=".csv,text/csv" hidden>
-    </div>
-    <div class="drop" id="drop">Drop a CSV here</div>
-    <div id="out" style="margin-top:18px"></div>
-  </div></section>
 
   <!-- ABOUT -->
   <section class="view" id="about"><div class="pad">
@@ -520,39 +505,4 @@ async function send(){
 $("#send").onclick=send;
 $("#in").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send();}});
 
-// mining
-function mine(rows){
-  const clean=rows.filter(r=>r.case&&r.activity);if(!clean.length)return{error:1};
-  const cases={};clean.forEach(r=>{(cases[r.case]=cases[r.case]||[]).push([r.timestamp,r.activity]);});
-  const act={},edges={},starts={},ends={},variants={};let events=0;
-  for(const c in cases){const evs=cases[c].slice().sort((a,b)=>a[0]<b[0]?-1:(a[0]>b[0]?1:0));const seq=evs.map(e=>e[1]);events+=seq.length;
-    seq.forEach(a=>act[a]=(act[a]||0)+1);starts[seq[0]]=(starts[seq[0]]||0)+1;ends[seq[seq.length-1]]=(ends[seq[seq.length-1]]||0)+1;
-    for(let i=0;i<seq.length-1;i++){const a=seq[i],b=seq[i+1];edges[a]=edges[a]||{};edges[a][b]=(edges[a][b]||0)+1;}
-    const v=seq.join(" → ");variants[v]=(variants[v]||0)+1;}
-  const arr=(o,ka,kb)=>Object.keys(o).map(k=>{const e={};e[ka]=k;e[kb]=o[k];return e;}).sort((a,b)=>b[kb]-a[kb]);
-  const ed=[];for(const a in edges){for(const b in edges[a]){ed.push({from:a,to:b,count:edges[a][b]});}}ed.sort((x,y)=>y.count-x.count);
-  return {cases:Object.keys(cases).length,events,activities:arr(act,"activity","count"),edges:ed,starts:arr(starts,"activity","count"),ends:arr(ends,"activity","count"),variants:arr(variants,"variant","count")};
-}
-function parseCSV(text){
-  const lines=text.replace(/\r/g,"").split("\n").filter(l=>l.trim().length);if(!lines.length)return[];
-  const h=lines[0].split(",").map(x=>x.trim().toLowerCase());
-  const ci=h.findIndex(x=>/case|trace|id/.test(x)),ai=h.findIndex(x=>/activity|action|event|step|task/.test(x)),ti=h.findIndex(x=>/time|date|ts|stamp/.test(x));
-  return lines.slice(1).map(l=>{const c=l.split(",");return {case:(c[ci]||"").trim(),activity:(c[ai]||"").trim(),timestamp:(c[ti]||"").trim()};});
-}
-function renderMine(d){
-  const o=$("#out");if(d.error){o.innerHTML='<div class="box">No usable events — check for case and activity columns.</div>';return;}
-  const tbl=(t,rows,cols)=>'<div class="box"><h3>'+t+'</h3><table><tr>'+cols.map(c=>'<th>'+c[0]+'</th>').join('')+'</tr>'+
-    rows.slice(0,25).map(x=>'<tr>'+cols.map(c=>'<td'+(c[2]?' class="n2"':'')+'>'+esc(x[c[1]])+'</td>').join('')+'</tr>').join('')+'</table></div>';
-  o.innerHTML='<div class="kv"><div><span class="k">Cases</span>'+d.cases+'</div><div><span class="k">Events</span>'+d.events+'</div><div><span class="k">Variants</span>'+d.variants.length+'</div></div><div class="grid">'+
-    tbl('Activity',d.activities,[['Activity','activity'],['Count','count',1]])+tbl('Flow',d.edges,[['From','from'],['To','to'],['Count','count',1]])+
-    tbl('Starts',d.starts,[['Activity','activity'],['Cases','count',1]])+tbl('Ends',d.ends,[['Activity','activity'],['Cases','count',1]])+'</div>';
-}
-const runMine=t=>renderMine(mine(parseCSV(t)));
-const SAMPLE="case,activity,timestamp\nA,Intake,1\nA,Placement,2\nA,Support,3\nA,Report,4\nB,Intake,1\nB,Placement,2\nB,Report,5\nC,Intake,1\nC,Placement,2\nC,Support,3\nC,Report,4";
-$("#sample").onclick=()=>runMine(SAMPLE);$("#choose").onclick=()=>$("#file").click();
-$("#file").onchange=e=>{const f=e.target.files[0];if(f)f.text().then(runMine);};
-const drop=$("#drop");
-["dragover","dragenter"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add("hot");}));
-["dragleave","drop"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove("hot");}));
-drop.addEventListener("drop",e=>{const f=e.dataTransfer.files[0];if(f)f.text().then(runMine);});
 </script></body></html>
