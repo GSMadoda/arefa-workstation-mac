@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apply — LEEMA Technology Incubation</title>
+<meta name="description" content="Apply to the LEEMA Technology Incubation programme. Applications are open — every applicant receives a written response.">
+<link rel="icon" type="image/png" href="assets/arefa.png">
+<meta name="theme-color" content="#05070d">
+<style>
+  :root{--blue:#1668ff;--blue-600:#0f56e0;--bg:#070a12;--card:rgba(255,255,255,.03);--line:rgba(255,255,255,.12);--ink:#fff;--muted:rgba(255,255,255,.66)}
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{min-height:100vh;background:radial-gradient(120% 90% at 80% 6%,#13233f,#070a12 55%);color:var(--ink);
+    font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;padding:0}
+  a{color:inherit}
+  .wrap{max-width:760px;margin:0 auto;padding:clamp(24px,5vw,56px) clamp(20px,5vw,40px) 80px}
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:clamp(26px,5vh,46px)}
+  .brand{font:800 17px/1 'Helvetica Neue',Helvetica,sans-serif;letter-spacing:.02em;color:#fff;text-decoration:none}
+  .back{font:600 13px/1 'Helvetica Neue',Helvetica,sans-serif;color:var(--muted);text-decoration:none}
+  .back:hover{color:#fff}
+  .eyebrow{font:600 12px/1 'Helvetica Neue',Helvetica,sans-serif;letter-spacing:.18em;color:var(--muted);text-transform:uppercase}
+  h1{font:700 clamp(30px,5vw,52px)/1.03 'Helvetica Neue',Helvetica,sans-serif;letter-spacing:-.03em;margin:14px 0 0}
+  h1 .accent{color:var(--blue)}
+  .rule{display:block;width:80px;height:4px;background:var(--blue);border-radius:2px;margin:20px 0 0}
+  .lede{font:400 clamp(15px,1.5vw,18px)/1.6 'Helvetica Neue',Helvetica,sans-serif;color:var(--muted);margin:22px 0 0;max-width:34em}
+  form{margin-top:clamp(28px,5vh,44px);display:grid;gap:18px}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .field{display:grid;gap:7px}
+  label{font:600 13px/1 'Helvetica Neue',Helvetica,sans-serif;color:rgba(255,255,255,.82)}
+  label .req{color:var(--blue)}
+  input,select,textarea{background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:11px;
+    padding:13px 15px;color:#fff;font:400 15px/1.4 'Helvetica Neue',Helvetica,sans-serif;width:100%}
+  select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23FFFFFF99' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 15px center;padding-right:38px}
+  input::placeholder,textarea::placeholder{color:rgba(255,255,255,.42)}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--blue);background:rgba(255,255,255,.1)}
+  textarea{resize:vertical;min-height:120px}
+  .field.invalid input,.field.invalid select,.field.invalid textarea{border-color:#ff5a5a;background:rgba(255,90,90,.06)}
+  .err{font:400 12px/1.3 'Helvetica Neue',Helvetica,sans-serif;color:#ff8f8f;display:none}
+  .field.invalid .err{display:block}
+  .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+  .actions{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-top:8px}
+  .btn{display:inline-flex;align-items:center;gap:8px;border:0;cursor:pointer;text-decoration:none;
+    font:600 15px/1 'Helvetica Neue',Helvetica,sans-serif;padding:15px 26px;border-radius:12px}
+  .btn-blue{background:var(--blue);color:#fff}
+  .btn-blue:hover{background:var(--blue-600)}
+  .btn-ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.32)}
+  .btn-ghost:hover{border-color:#fff}
+  .note{font:400 12.5px/1.5 'Helvetica Neue',Helvetica,sans-serif;color:rgba(255,255,255,.5);margin-top:6px}
+  .fine{margin-top:34px;font:400 12px/1.6 'Helvetica Neue',Helvetica,sans-serif;color:rgba(255,255,255,.45)}
+  .fine a{color:rgba(255,255,255,.75)}
+  /* success panel */
+  .done{display:none;margin-top:clamp(28px,5vh,44px);background:var(--card);border:1px solid rgba(22,104,255,.4);
+    border-radius:18px;padding:clamp(26px,4vw,40px)}
+  .done.show{display:block}
+  .done .tick{width:56px;height:56px;border-radius:50%;background:rgba(22,104,255,.16);display:flex;align-items:center;justify-content:center;margin-bottom:20px}
+  .done .tick svg{width:28px;height:28px;stroke:var(--blue);fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+  .done h2{font:700 clamp(24px,3vw,34px)/1.1 'Helvetica Neue',Helvetica,sans-serif;letter-spacing:-.02em;margin:0}
+  .done p{font:400 15px/1.65 'Helvetica Neue',Helvetica,sans-serif;color:var(--muted);margin:16px 0 0;max-width:40em}
+  .ref{display:inline-flex;align-items:center;gap:10px;margin-top:22px;padding:12px 18px;border:1px dashed rgba(255,255,255,.28);border-radius:11px;
+    font:600 15px/1 'Helvetica Neue',Helvetica,monospace;letter-spacing:.04em;color:#fff}
+  .ref span{font:600 11px/1 'Helvetica Neue',Helvetica,sans-serif;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
+  @media (max-width:560px){.row{grid-template-columns:1fr}}
+  .pw{margin-top:44px;font:400 11px/1.4 'Helvetica Neue',Helvetica,sans-serif;color:rgba(255,255,255,.4)}
+  .pw b{color:rgba(255,255,255,.7);font-weight:800}
+</style></head>
+<body>
+<main class="wrap">
+  <div class="topbar">
+    <a class="brand" href="./">LEEMA</a>
+    <a class="back" href="./">&larr; Back to site</a>
+  </div>
+
+  <section id="intro">
+    <div class="eyebrow">Apply</div>
+    <h1>Applications are <span class="accent">open</span>.</h1>
+    <span class="rule"></span>
+    <p class="lede">Tell us about you and your enterprise. Every application gets a response — accepted, or held and assessed as the incubator grows. It costs nothing to apply.</p>
+  </section>
+
+  <form id="applyForm" novalidate>
+    <div class="row">
+      <div class="field" data-for="name">
+        <label for="name">Full name <span class="req">*</span></label>
+        <input id="name" name="name" type="text" autocomplete="name" placeholder="Your name">
+        <div class="err">Please enter your name.</div>
+      </div>
+      <div class="field" data-for="email">
+        <label for="email">Email <span class="req">*</span></label>
+        <input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com">
+        <div class="err">Please enter a valid email address.</div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="field" data-for="phone">
+        <label for="phone">Phone</label>
+        <input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="0__ ___ ____">
+        <div class="err">Please check this number.</div>
+      </div>
+      <div class="field" data-for="business">
+        <label for="business">Business / idea name</label>
+        <input id="business" name="business" type="text" placeholder="Trading or project name">
+        <div class="err"></div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="field" data-for="sector">
+        <label for="sector">Sector</label>
+        <input id="sector" name="sector" type="text" placeholder="e.g. device repair, spaza, welding">
+        <div class="err"></div>
+      </div>
+      <div class="field" data-for="stage">
+        <label for="stage">Stage</label>
+        <select id="stage" name="stage">
+          <option value="">Select…</option>
+          <option>Pre-incubation — an idea, not yet registered</option>
+          <option>Incubation — registered, trading</option>
+          <option>Scale-up — established, growing</option>
+        </select>
+        <div class="err"></div>
+      </div>
+    </div>
+
+    <div class="field" data-for="message">
+      <label for="message">About your business and what you need <span class="req">*</span></label>
+      <textarea id="message" name="message" placeholder="What you do, where you are, and how the incubator could help."></textarea>
+      <div class="err">Please tell us a little about your business.</div>
+    </div>
+
+    <!-- honeypot: real people leave this empty -->
+    <div class="hp" aria-hidden="true"><label>Company<input id="company" name="company" type="text" tabindex="-1" autocomplete="off"></label></div>
+
+    <div class="actions">
+      <button class="btn btn-blue" type="submit">Submit application &rarr;</button>
+      <a class="btn btn-ghost" href="./#eligibility">See eligibility</a>
+    </div>
+    <p class="note">Your application is saved on this device as you submit, so nothing is lost. LEEMA is moving to its own hosting soon — until then you can also send it straight to our inbox on the next screen.</p>
+  </form>
+
+  <section class="done" id="done" aria-live="polite">
+    <div class="tick"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5 5 11-11"/></svg></div>
+    <h2>Application received.</h2>
+    <p id="doneMsg">Thank you, <b id="doneName">applicant</b>. Your application has been captured. Every applicant gets a written answer — we aim to come back to you within four weeks, whether you're accepted now or held for assessment as the programme grows.</p>
+    <div class="ref"><span>Reference</span><em id="refId" style="font-style:normal">—</em></div>
+    <div class="actions" style="margin-top:26px">
+      <a class="btn btn-blue" id="sendEmail" href="#">Send a copy to LEEMA &rarr;</a>
+      <button class="btn btn-ghost" id="download" type="button">Download your application</button>
+      <button class="btn btn-ghost" id="again" type="button">Submit another</button>
+    </div>
+    <p class="note">"Send a copy to LEEMA" opens your email app with everything filled in — tap send to reach us right away.</p>
+  </section>
+
+  <p class="fine">A Sedfa-supported incubator. No cost to the enterprises we accept. Questions? Email <a href="mailto:abie.kgomongwe@gmail.com">abie.kgomongwe@gmail.com</a>.</p>
+  <div class="pw">Powered by <b>AREFA</b></div>
+</main>
+
+<script>
+(function(){
+  "use strict";
+  var TO = "abie.kgomongwe@gmail.com", CC = "smadoda01@gmail.com";
+  var form = document.getElementById("applyForm");
+  var done = document.getElementById("done");
+  var required = ["name","email","message"];
+  var last = null;
+
+  function fieldWrap(id){ return document.querySelector('.field[data-for="'+id+'"]'); }
+  function setInvalid(id, bad){ var w = fieldWrap(id); if (w) w.classList.toggle("invalid", !!bad); }
+  function validEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+
+  function collect(){
+    var d = {};
+    ["name","email","phone","business","sector","stage","message"].forEach(function(k){
+      var el = document.getElementById(k); d[k] = el ? el.value.trim() : "";
+    });
+    return d;
+  }
+
+  function validate(d){
+    var ok = true;
+    required.forEach(function(k){
+      var bad = !d[k];
+      if (k === "email" && d[k]) bad = !validEmail(d[k]);
+      setInvalid(k, bad);
+      if (bad) ok = false;
+    });
+    return ok;
+  }
+
+  function makeRef(){
+    var now = new Date();
+    var ymd = now.getFullYear().toString()
+      + ("0"+(now.getMonth()+1)).slice(-2)
+      + ("0"+now.getDate()).slice(-2);
+    var rnd = Math.random().toString(36).slice(2,6).toUpperCase();
+    return "LEEMA-" + ymd + "-" + rnd;
+  }
+
+  function save(rec){
+    try{
+      var key = "leema_applications";
+      var arr = JSON.parse(localStorage.getItem(key) || "[]");
+      arr.push(rec);
+      localStorage.setItem(key, JSON.stringify(arr));
+      return true;
+    }catch(e){ return false; }
+  }
+
+  function asText(rec){
+    return [
+      "LEEMA Technology Incubation — application",
+      "Reference: " + rec.ref,
+      "Submitted: " + new Date(rec.ts).toLocaleString(),
+      "",
+      "Full name:            " + rec.name,
+      "Email:                " + rec.email,
+      "Phone:                " + (rec.phone || "—"),
+      "Business / idea name: " + (rec.business || "—"),
+      "Sector:               " + (rec.sector || "—"),
+      "Stage:                " + (rec.stage || "—"),
+      "",
+      "About the business and what they need:",
+      rec.message
+    ].join("\n");
+  }
+
+  function mailtoHref(rec){
+    var subject = "LEEMA application — " + rec.name + " (" + rec.ref + ")";
+    return "mailto:" + TO
+      + "?cc=" + encodeURIComponent(CC)
+      + "&subject=" + encodeURIComponent(subject)
+      + "&body=" + encodeURIComponent(asText(rec));
+  }
+
+  function showDone(rec){
+    document.getElementById("doneName").textContent = rec.name || "applicant";
+    document.getElementById("refId").textContent = rec.ref;
+    document.getElementById("sendEmail").setAttribute("href", mailtoHref(rec));
+    form.style.display = "none";
+    done.classList.add("show");
+    done.scrollIntoView({behavior:"smooth", block:"start"});
+  }
+
+  form.addEventListener("submit", function(e){
+    e.preventDefault();
+    // honeypot — silently accept bots without recording
+    if (document.getElementById("company").value){ return; }
+    var d = collect();
+    if (!validate(d)){
+      var firstBad = document.querySelector(".field.invalid input, .field.invalid textarea, .field.invalid select");
+      if (firstBad) firstBad.focus();
+      return;
+    }
+    d.ref = makeRef();
+    d.ts = Date.now();
+    save(d);
+    last = d;
+    showDone(d);
+  });
+
+  // clear a field's error state as the user fixes it
+  form.addEventListener("input", function(e){
+    var w = e.target.closest(".field");
+    if (w && w.classList.contains("invalid")) w.classList.remove("invalid");
+  });
+
+  document.getElementById("download").addEventListener("click", function(){
+    if (!last) return;
+    var blob = new Blob([asText(last)], {type:"text/plain;charset=utf-8"});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url; a.download = last.ref + "-application.txt";
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 1500);
+  });
+
+  document.getElementById("again").addEventListener("click", function(){
+    form.reset();
+    done.classList.remove("show");
+    form.style.display = "";
+    form.scrollIntoView({behavior:"smooth", block:"start"});
+    var n = document.getElementById("name"); if (n) n.focus();
+  });
+})();
+</script>
+</body></html>
